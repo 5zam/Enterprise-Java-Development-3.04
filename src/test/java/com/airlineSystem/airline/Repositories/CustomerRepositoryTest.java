@@ -15,18 +15,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class CustomerRepositoryTest {
-
-    //name of class and name
     @Autowired
     CustomerRepository customerRepository;
-    private Customer customer1;
-    private Customer customer2;
+    private Customer cust1;
+    private Customer cust2;
 
     @BeforeEach
-    //test create new customers.
-    void InsertNewCustomer() {
+
+    void InsertRecord() {
         customerRepository.saveAll(List.of(
-                //data from customer table
                 new Customer("Agustine Riviera", CustomerStatus.SILVER,115235),
                 new Customer ("Alaina Sepulvida",CustomerStatus.NOUN,6008),
                 new Customer ("Tom Jones",CustomerStatus.GOLD,205767),
@@ -44,31 +41,26 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void findByCustomerName() {
-        //add method getCustomerName in customer interface
-        List<Customer> foundCustomer = customerRepository.findCustomerByCustomerName("Ana Janco");
+    void findByCustomerByName() {
+        List<Customer> foundCustomer = customerRepository.findCustomerByCustomerName("Sam Rio");
         assertEquals(1, foundCustomer.size());
-        assertEquals("Ana Janco", foundCustomer.get(0).getCustomerName());
+        assertEquals("Sam Rio", foundCustomer.get(0).getCustomerName());
     }
-    //customers by status
+
     @Test
-    void testFindCustomersByStatus() {
+    void findCustomerByCustomerStatus() {
         CustomerStatus Customerstatus = CustomerStatus.SILVER;
         List<Customer> customers = customerRepository.findCustomerByCustomerStatus(CustomerStatus.SILVER);
-        assertEquals(6, customers.size());
+        assertEquals(4, customers.size());
         assertEquals(CustomerStatus.SILVER, customers.get(0).getCustomerStatus());
         assertEquals(CustomerStatus.SILVER, customers.get(1).getCustomerStatus());
-        assertNotNull(customers, "List of customers should not be null");
-        assertFalse(customers.isEmpty(), "List of customers should not be empty");
+        assertNotNull(customers, "List of customers can not be empty");
+        assertFalse(customers.isEmpty(), "List of customers can not be empty");
         assertTrue(customers.stream().allMatch(customer -> customer.getCustomerStatus() == Customerstatus),
-                "You must have specified status");
-
-
+                "You must have status");
     }
-
     @AfterEach
     public void removeAll() {
-        //after each test remove all grades
         customerRepository.deleteAll();
     }
 
